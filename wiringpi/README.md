@@ -15,8 +15,10 @@ $ ./build
 
 ### Compile and Run Code
 
+Clone this repo, then:
+
 ```
-$ cd wiringpi
+$ cd cpitrafficlights/wiringpi
 $ make
 $ ./trafficlights
 ```
