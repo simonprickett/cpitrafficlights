@@ -7,16 +7,16 @@
 #define YELLOW 12
 #define GREEN 14
 
-void allLightsOff();
-void interruptHandler(int);
+static void allLightsOff();
+static void interruptHandler(int);
 
-void allLightsOff() {
+static void allLightsOff() {
 	digitalWrite(RED, LOW);
 	digitalWrite(YELLOW, LOW);
 	digitalWrite(GREEN, LOW);
 }
 
-void interruptHandler(int signal) {
+static void interruptHandler(int signal) {
 	allLightsOff();
 	exit(0);
 }
