@@ -17,6 +17,6 @@ $ ./build
 
 ```
 $ cd wiringpi
-$ gcc -Wall -o trafficlights trafficlights.c -lwiringPi
+$ make
 $ ./trafficlights
 ```
