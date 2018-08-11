@@ -48,7 +48,18 @@ static void gpioSetup(int pin) {
 }
 
 static void gpioCleanup(int pin) {
-	// TODO
+	// Unexport pin.
+	int fd = open("/sys/class/gpio/unexport", O_WRONLY);
+	char buf[3];
+
+	if (-1 == fd) {
+		fprintf(stderr, "Couldn't open /sys/class/gpio/unexport for writing!\n");
+		exit(1);
+	}
+
+	sprintf(buf, "%d", pin);
+	write(fd, buf, strlen(buf));
+	close(fd);
 }
 
 static void gpioWrite(int pin, int val) {
