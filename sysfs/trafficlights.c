@@ -51,13 +51,13 @@ static void allLightsOff() {
 	gpioWrite(RED, GPIO_LOW);
 	gpioWrite(YELLOW, GPIO_LOW);
 	gpioWrite(GREEN, GPIO_LOW);
-	gpioCleanup(RED);
-	gpioCleanup(YELLOW);
-	gpioCleanup(GREEN);
 }
 
 static void interruptHandler(int signal) {
 	allLightsOff();
+	gpioCleanup(RED);
+	gpioCleanup(YELLOW);
+	gpioCleanup(GREEN);
 	exit(0);
 }
 
