@@ -8,44 +8,68 @@
 #define GPIO_LOW 0
 #define GPIO_HIGH 1
 
-#define RED 13
-#define YELLOW 12
-#define GREEN 14
+#define RED 9 
+#define YELLOW 10
+#define GREEN 11
 
-static int gpioSetup(int pin);
-static int gpioCleanup(int pin);
-static int gpioWrite(int pin, int val);
+static void gpioSetup(int pin);
+static void gpioCleanup(int pin);
+static void gpioWrite(int pin, int val);
 
 static void allLightsOff();
 static void interruptHandler(int);
 
-static int gpioSetup(int pin) {
+static void gpioSetup(int pin) {
 	// Export pin and set as output.
 	int fd = open("/sys/class/gpio/export", O_WRONLY);
-	char buf[3];
+	char buf[33];
 
 	if (-1 == fd) {
 		fprintf(stderr, "Couldn't open /sys/class/gpio/export for writing!\n");
-		return(-1);
+		exit(1);
 	}
 
 	sprintf(buf, "%d", pin);
 	write(fd, buf, strlen(buf));
 
 	close(fd);
-	return(0);
+
+	sprintf(buf, "/sys/class/gpio/gpio%d/direction", pin);
+
+	fd = open(buf, O_WRONLY);
+
+	if (-1 == fd) {
+		fprintf(stderr, "Couldn't open %s for writing!\n", buf);
+		exit(1);
+	}
+
+	write(fd, "out", 3);
+	close(fd);
 }
 
-static int gpioCleanup(int pin) {
+static void gpioCleanup(int pin) {
 	// TODO
-	return 0;
 }
 
-static int gpioWrite(int pin, int val) {
-	// TODO
-	return 0;
-}
+static void gpioWrite(int pin, int val) {
+	char buf[29];
+	int fd;
 
+	sprintf(buf, "/sys/class/gpio/gpio%d/value", pin);
+
+	fd = open(buf, O_WRONLY);
+
+	if (-1 == fd) {
+		fprintf(stderr, "Couldn't open %s for writing!\n", buf);
+		exit(1);
+	}
+
+	sprintf(buf, "%d", val);
+
+	write(fd, buf, 1);
+
+	close(fd);
+}
 
 static void allLightsOff() {
 	gpioWrite(RED, GPIO_LOW);
@@ -73,22 +97,22 @@ int main(void) {
 	while(1) {
 		// Red
 		gpioWrite(RED, GPIO_HIGH);
-		sleep(3000);
+		sleep(3);
 
 		// Red and Yellow
 		gpioWrite(YELLOW, GPIO_HIGH);
-		sleep(1000);
+		sleep(1);
 
 		// Green
 		gpioWrite(RED, GPIO_LOW);
 		gpioWrite(YELLOW, GPIO_LOW);
 		gpioWrite(GREEN, GPIO_HIGH);
-		sleep(5000);
+		sleep(5);
 
 		// Yellow
 		gpioWrite(GREEN, GPIO_LOW);
 		gpioWrite(YELLOW, GPIO_HIGH);
-		sleep(2000);
+		sleep(2);
 
 		// Yellow off
 		gpioWrite(YELLOW, GPIO_LOW);
