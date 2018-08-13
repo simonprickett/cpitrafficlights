@@ -12,13 +12,32 @@
 #define YELLOW 10
 #define GREEN 11
 
-void gpioSetup(int pin);
-void gpioCleanup(int pin);
-void gpioWrite(int pin, int val);
+void writeToFile(const char *absoluteFileName, const char *contents); 
+void gpioSetup(const int pin);
+void gpioCleanup(const int pin);
+void gpioWrite(const int pin, const int val);
 void allLightsOff();
 void interruptHandler(int);
 
-void gpioSetup(int pin) {
+void writeToFile(const char *absoluteFileName, const char *contents) {
+	int fd = open(absoluteFileName, O_WRONLY);
+
+	if (-1 == fd) {
+		fprintf(stderr, "Couldn't open %s for writing!\n", absoluteFileName);
+		exit(1);
+	}
+
+	int contentsLength = strlen(contents);
+
+	if (write(fd, contents, contentsLength) != contentsLength) {
+		fprintf(stderr, "Failed to write entire value %s to %s!\n", contents, absoluteFileName);
+		exit(1);
+	}
+
+	close(fd);
+}
+
+void gpioSetup(const int pin) {
 	// Export pin and set as output.
 	int fd = open("/sys/class/gpio/export", O_WRONLY);
 	char buf[33];
@@ -49,7 +68,7 @@ void gpioSetup(int pin) {
 	close(fd);
 }
 
-void gpioCleanup(int pin) {
+void gpioCleanup(const int pin) {
 	// Unexport pin.
 	int fd = open("/sys/class/gpio/unexport", O_WRONLY);
 	char buf[3];
@@ -64,7 +83,7 @@ void gpioCleanup(int pin) {
 	close(fd);
 }
 
-void gpioWrite(int pin, int val) {
+void gpioWrite(const int pin, const int val) {
 	char buf[29];
 	int fd;
 
