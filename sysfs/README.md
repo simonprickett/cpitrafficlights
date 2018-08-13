@@ -2,7 +2,7 @@
 
 ## sysfs Method
 
-TODO Overview...
+Example showing how to use the Low Voltage Labs Traffic Lights with the sysfs method of accessing the GPIO pins.
 
 ### Attach Traffic Lights
 
