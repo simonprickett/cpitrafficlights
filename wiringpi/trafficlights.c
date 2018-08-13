@@ -8,7 +8,7 @@
 #define GREEN 14
 
 static void allLightsOff();
-static void interruptHandler(int);
+static void interruptHandler(const int);
 
 static void allLightsOff() {
 	digitalWrite(RED, LOW);
@@ -16,7 +16,7 @@ static void allLightsOff() {
 	digitalWrite(GREEN, LOW);
 }
 
-static void interruptHandler(int signal) {
+static void interruptHandler(const int signal) {
 	allLightsOff();
 	exit(0);
 }
