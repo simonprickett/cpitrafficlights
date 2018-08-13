@@ -31,6 +31,7 @@ void writeToFile(const char *absoluteFileName, const char *contents) {
 
 	if (write(fd, contents, contentsLength) != contentsLength) {
 		fprintf(stderr, "Failed to write entire value %s to %s!\n", contents, absoluteFileName);
+		close(fd);
 		exit(1);
 	}
 
@@ -38,64 +39,25 @@ void writeToFile(const char *absoluteFileName, const char *contents) {
 }
 
 void gpioSetup(const char *pin) {
-	// Export pin and set as output.
-	int fd = open("/sys/class/gpio/export", O_WRONLY);
-	char buf[33];
-
-	if (-1 == fd) {
-		fprintf(stderr, "Couldn't open /sys/class/gpio/export for writing!\n");
-		exit(1);
-	}
-
-	write(fd, pin, strlen(pin));
-
-	close(fd);
+	writeToFile("/sys/class/gpio/export", pin);
 
 	// Short sleep to let the operating system create a symlink!
 	sleep(1);
 
+	char buf[33];
 	sprintf(buf, "/sys/class/gpio/gpio%s/direction", pin);
 
-	fd = open(buf, O_WRONLY);
-
-	if (-1 == fd) {
-		fprintf(stderr, "Couldn't open %s for writing!\n", buf);
-		exit(1);
-	}
-
-	write(fd, "out", 3);
-	close(fd);
+	writeToFile(buf, "out");
 }
 
 void gpioCleanup(const char *pin) {
-	// Unexport pin.
-	int fd = open("/sys/class/gpio/unexport", O_WRONLY);
-
-	if (-1 == fd) {
-		fprintf(stderr, "Couldn't open /sys/class/gpio/unexport for writing!\n");
-		exit(1);
-	}
-
-	write(fd, pin, strlen(pin));
-	close(fd);
+	writeToFile("/sys/class/gpio/unexport", pin);
 }
 
 void gpioWrite(const char *pin, const char *val) {
 	char buf[29];
-	int fd;
-
 	sprintf(buf, "/sys/class/gpio/gpio%s/value", pin);
-
-	fd = open(buf, O_WRONLY);
-
-	if (-1 == fd) {
-		fprintf(stderr, "Couldn't open %s for writing!\n", buf);
-		exit(1);
-	}
-
-	write(fd, val, 1);
-
-	close(fd);
+	writeToFile(buf, val);
 }
 
 void allLightsOff() {
