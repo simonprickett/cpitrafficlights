@@ -12,14 +12,13 @@
 #define YELLOW 10
 #define GREEN 11
 
-static void gpioSetup(int pin);
-static void gpioCleanup(int pin);
-static void gpioWrite(int pin, int val);
+void gpioSetup(int pin);
+void gpioCleanup(int pin);
+void gpioWrite(int pin, int val);
+void allLightsOff();
+void interruptHandler(int);
 
-static void allLightsOff();
-static void interruptHandler(int);
-
-static void gpioSetup(int pin) {
+void gpioSetup(int pin) {
 	// Export pin and set as output.
 	int fd = open("/sys/class/gpio/export", O_WRONLY);
 	char buf[33];
@@ -47,7 +46,7 @@ static void gpioSetup(int pin) {
 	close(fd);
 }
 
-static void gpioCleanup(int pin) {
+void gpioCleanup(int pin) {
 	// Unexport pin.
 	int fd = open("/sys/class/gpio/unexport", O_WRONLY);
 	char buf[3];
@@ -62,7 +61,7 @@ static void gpioCleanup(int pin) {
 	close(fd);
 }
 
-static void gpioWrite(int pin, int val) {
+void gpioWrite(int pin, int val) {
 	char buf[29];
 	int fd;
 
@@ -82,13 +81,13 @@ static void gpioWrite(int pin, int val) {
 	close(fd);
 }
 
-static void allLightsOff() {
+void allLightsOff() {
 	gpioWrite(RED, GPIO_LOW);
 	gpioWrite(YELLOW, GPIO_LOW);
 	gpioWrite(GREEN, GPIO_LOW);
 }
 
-static void interruptHandler(int signal) {
+void interruptHandler(int signal) {
 	allLightsOff();
 	gpioCleanup(RED);
 	gpioCleanup(YELLOW);
