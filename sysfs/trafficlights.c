@@ -17,7 +17,7 @@ static void gpioSetup(const char *pin);
 static void gpioCleanup(const char *pin);
 static void gpioWrite(const char *pin, const char *val);
 static void allLightsOff();
-static void interruptHandler(int);
+static void interruptHandler(const int);
 
 static void writeToFile(const char *absoluteFileName, const char *contents) {
 	int fd = open(absoluteFileName, O_WRONLY);
@@ -66,7 +66,7 @@ static void allLightsOff() {
 	gpioWrite(GREEN, GPIO_LOW);
 }
 
-void interruptHandler(int signal) {
+void interruptHandler(const int signal) {
 	allLightsOff();
 	gpioCleanup(RED);
 	gpioCleanup(YELLOW);
