@@ -5,17 +5,17 @@
 #include <string.h>
 #include <unistd.h>
 
-#define GPIO_LOW 0
-#define GPIO_HIGH 1
+#define GPIO_LOW "0"
+#define GPIO_HIGH "1"
 
-#define RED 9 
-#define YELLOW 10
-#define GREEN 11
+#define RED "9"
+#define YELLOW "10"
+#define GREEN "11"
 
 void writeToFile(const char *absoluteFileName, const char *contents); 
-void gpioSetup(const int pin);
-void gpioCleanup(const int pin);
-void gpioWrite(const int pin, const int val);
+void gpioSetup(const char *pin);
+void gpioCleanup(const char *pin);
+void gpioWrite(const char *pin, const char *val);
 void allLightsOff();
 void interruptHandler(int);
 
@@ -37,7 +37,7 @@ void writeToFile(const char *absoluteFileName, const char *contents) {
 	close(fd);
 }
 
-void gpioSetup(const int pin) {
+void gpioSetup(const char *pin) {
 	// Export pin and set as output.
 	int fd = open("/sys/class/gpio/export", O_WRONLY);
 	char buf[33];
@@ -47,15 +47,14 @@ void gpioSetup(const int pin) {
 		exit(1);
 	}
 
-	sprintf(buf, "%d", pin);
-	write(fd, buf, strlen(buf));
+	write(fd, pin, strlen(pin));
 
 	close(fd);
 
 	// Short sleep to let the operating system create a symlink!
 	sleep(1);
 
-	sprintf(buf, "/sys/class/gpio/gpio%d/direction", pin);
+	sprintf(buf, "/sys/class/gpio/gpio%s/direction", pin);
 
 	fd = open(buf, O_WRONLY);
 
@@ -68,26 +67,24 @@ void gpioSetup(const int pin) {
 	close(fd);
 }
 
-void gpioCleanup(const int pin) {
+void gpioCleanup(const char *pin) {
 	// Unexport pin.
 	int fd = open("/sys/class/gpio/unexport", O_WRONLY);
-	char buf[3];
 
 	if (-1 == fd) {
 		fprintf(stderr, "Couldn't open /sys/class/gpio/unexport for writing!\n");
 		exit(1);
 	}
 
-	sprintf(buf, "%d", pin);
-	write(fd, buf, strlen(buf));
+	write(fd, pin, strlen(pin));
 	close(fd);
 }
 
-void gpioWrite(const int pin, const int val) {
+void gpioWrite(const char *pin, const char *val) {
 	char buf[29];
 	int fd;
 
-	sprintf(buf, "/sys/class/gpio/gpio%d/value", pin);
+	sprintf(buf, "/sys/class/gpio/gpio%s/value", pin);
 
 	fd = open(buf, O_WRONLY);
 
@@ -96,9 +93,7 @@ void gpioWrite(const int pin, const int val) {
 		exit(1);
 	}
 
-	sprintf(buf, "%d", val);
-
-	write(fd, buf, 1);
+	write(fd, val, 1);
 
 	close(fd);
 }
