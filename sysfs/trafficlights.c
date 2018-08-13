@@ -12,14 +12,14 @@
 #define YELLOW "10"
 #define GREEN "11"
 
-void writeToFile(const char *absoluteFileName, const char *contents); 
-void gpioSetup(const char *pin);
-void gpioCleanup(const char *pin);
-void gpioWrite(const char *pin, const char *val);
-void allLightsOff();
-void interruptHandler(int);
+static void writeToFile(const char *absoluteFileName, const char *contents); 
+static void gpioSetup(const char *pin);
+static void gpioCleanup(const char *pin);
+static void gpioWrite(const char *pin, const char *val);
+static void allLightsOff();
+static void interruptHandler(int);
 
-void writeToFile(const char *absoluteFileName, const char *contents) {
+static void writeToFile(const char *absoluteFileName, const char *contents) {
 	int fd = open(absoluteFileName, O_WRONLY);
 
 	if (-1 == fd) {
@@ -38,7 +38,7 @@ void writeToFile(const char *absoluteFileName, const char *contents) {
 	close(fd);
 }
 
-void gpioSetup(const char *pin) {
+static void gpioSetup(const char *pin) {
 	writeToFile("/sys/class/gpio/export", pin);
 
 	// Short sleep to let the operating system create a symlink!
@@ -50,17 +50,17 @@ void gpioSetup(const char *pin) {
 	writeToFile(buf, "out");
 }
 
-void gpioCleanup(const char *pin) {
+static void gpioCleanup(const char *pin) {
 	writeToFile("/sys/class/gpio/unexport", pin);
 }
 
-void gpioWrite(const char *pin, const char *val) {
+static void gpioWrite(const char *pin, const char *val) {
 	char buf[29];
 	sprintf(buf, "/sys/class/gpio/gpio%s/value", pin);
 	writeToFile(buf, val);
 }
 
-void allLightsOff() {
+static void allLightsOff() {
 	gpioWrite(RED, GPIO_LOW);
 	gpioWrite(YELLOW, GPIO_LOW);
 	gpioWrite(GREEN, GPIO_LOW);
