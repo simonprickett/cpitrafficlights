@@ -4,11 +4,14 @@
 
 TODO Overview...
 
+### Attach Traffic Lights
+
+Attach the traffic lights so that they are connected to GPIO 9, 10, 11.
+
 ### Compile and Run Code
 
-Clone this repo, then:
-
 ```
+$ git clone https://github.com/simonprickett/cpitrafficlights.git
 $ cd cpitrafficlights/sysfs
 $ make
 $ ./trafficlights
