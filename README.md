@@ -16,4 +16,5 @@ Using this method requires no external libraries, we just need to write code to 
 
 # Resources
 
-The [code samples page](https://elinux.org/RPi_GPIO_Code_Samples) at elinux.org has a wealth of information about GPIO programming for the Raspberry Pi.
+* The [code samples page](https://elinux.org/RPi_GPIO_Code_Samples) at elinux.org has a wealth of information about GPIO programming for the Raspberry Pi.
+* resin.io have also published a [good summary of options](https://docs.resin.io/learn/develop/hardware/gpio/#raspberry-pi) for working with GPIO.
