@@ -33,6 +33,9 @@ void gpioSetup(int pin) {
 
 	close(fd);
 
+	// Short sleep to let the operating system create a symlink!
+	sleep(1);
+
 	sprintf(buf, "/sys/class/gpio/gpio%d/direction", pin);
 
 	fd = open(buf, O_WRONLY);
