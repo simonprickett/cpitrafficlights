@@ -1,6 +1,6 @@
 # Experiments with Low Voltage Labs Traffic Lights on Raspberry Pi in C
 
-Let's look at a couple of ways of controlling the Raspberry Pi's GPIO pins using the C programming language, and the Low Voltage Labs traffic light LEDs.
+Let's look at a couple of ways of controlling the Raspberry Pi's GPIO pins using the C programming language, and the [Low Voltage Labs traffic light LEDs](http://lowvoltagelabs.com/products/pi-traffic/).
 
 # Wiring Pi Method
 
