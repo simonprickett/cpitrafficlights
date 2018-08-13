@@ -2,8 +2,7 @@
 
 ## Wiring Pi Method
 
-TODO Overview...
-
+Example showing how to use the Low Voltage Labs Traffic Lights with the popular Wiring Pi library.
 
 ### Attach Traffic Lights
 
