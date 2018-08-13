@@ -24,7 +24,7 @@ static void interruptHandler(int signal) {
 int main(void) {
 	signal(SIGINT, interruptHandler);
 
-	if (wiringPiSetup() == -1) {
+	if (-1 == wiringPiSetup()) {
 		printf("Failed to setup Wiring Pi!\n");
 		return 1;
 	}
