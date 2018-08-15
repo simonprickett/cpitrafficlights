@@ -22,13 +22,20 @@ static void writeToFile(const char *absoluteFileName, const char *contents) {
 }
 
 void gpioSetup(const char *pin) {
+	// TODO only export if not already exported...
 	writeToFile("/sys/class/gpio/export", pin);
 
-	// Short sleep to let the operating system create a symlink!
-	sleep(1);
-
 	char buf[33];
+	struct stat statBuf;
+	int pinExported = -1;
+
 	sprintf(buf, "/sys/class/gpio/gpio%s/direction", pin);
+
+	// May have to briefly wait for OS to make symlink! 
+	while (pinExported != 0) {	
+		sleep(1);
+		pinExported = stat(buf, &statBuf);
+	}
 
 	writeToFile(buf, "out");
 }
