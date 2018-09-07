@@ -4,7 +4,7 @@ Let's look at a couple of ways of controlling the Raspberry Pi's GPIO pins using
 
 # Wiring Pi Method
 
-[Wiring Pi](http://wiringpi.com/) is a well established library for handling GPIO interactions.  
+[Wiring Pi](http://wiringpi.com/) is a well established library for handling GPIO interactions.  Full details in [this Medium article](https://medium.com/@simon_prickett/gpio-access-in-c-with-raspberry-pi-traffic-lights-6b982e197d45).
 
 [Here's my example code and documentation](wiringpi/).
 
